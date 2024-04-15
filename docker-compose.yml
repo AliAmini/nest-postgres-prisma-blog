@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  db:
+    container_name: appolon-postgres
+    image: postgres:alpine
+    restart: always
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin-password
+      POSTGRES_DB: apollonn
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data
