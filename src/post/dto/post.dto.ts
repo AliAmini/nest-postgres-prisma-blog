@@ -1,6 +1,6 @@
 import { Comment, UserType } from "@prisma/client";
 import { Exclude, Type } from "class-transformer";
-import { IsArray, IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
 
 
 export class TagResponseDto {
@@ -96,4 +96,21 @@ export class CreatePostDto {
   @IsArray()
   @Type(() => String)
   tags: string[];
+}
+
+export class UpdatePostDto {
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  title?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  article?: string;
 }
