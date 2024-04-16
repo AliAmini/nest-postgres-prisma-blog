@@ -23,6 +23,7 @@ model User {
   updated_at     DateTime @updatedAt
 
   posts           Post[]
+  comments        Comment[]
 }
 
 model Post {
@@ -49,6 +50,9 @@ model Comment {
 
   post_id          Int
   post             Post @relation(fields: [post_id], references: [id])
+
+  user_id          Int
+  user             User @relation(fields: [user_id], references: [id])
 }
 
 model Tag {
