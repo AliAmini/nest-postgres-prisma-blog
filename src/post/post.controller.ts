@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Put, Delete } from '@nestjs/common';
-import { PostResponseDto } from './dto/post.dto';
+import { Controller, Get, Post, Put, Delete, Body } from '@nestjs/common';
+import { CreatePostDto, PostResponseDto } from './dto/post.dto';
 import { PostService } from './post.service';
 
 @Controller('post')
@@ -12,8 +12,8 @@ export class PostController {
   }
 
   @Post()
-  createPost(): string {
-    return 'Create a new post';
+  createPost(@Body() body: CreatePostDto): Promise<PostResponseDto> {
+    return this.postService.createPost(body);
   };
 
   @Put(':id')

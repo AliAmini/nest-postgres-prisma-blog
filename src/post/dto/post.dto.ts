@@ -1,5 +1,6 @@
-import { Comment, Post, UserType } from "@prisma/client";
-import { Exclude } from "class-transformer";
+import { Comment, UserType } from "@prisma/client";
+import { Exclude, Type } from "class-transformer";
+import { IsArray, IsNotEmpty, IsString, ValidateNested } from "class-validator";
 
 
 export class TagResponseDto {
@@ -66,6 +67,9 @@ export class PostResponseDto {
     name: string;
   }
 
+  @Exclude()
+  user_id: number;
+
   tags: TagResponseDto[]
 
   constructor(post: Partial<PostResponseDto>) {    
@@ -75,3 +79,21 @@ export class PostResponseDto {
   }
 }
 
+
+export class CreatePostDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
+  @IsString()
+  @IsNotEmpty()
+  article: string;
+
+  @IsArray()
+  @Type(() => String)
+  tags: string[];
+}
