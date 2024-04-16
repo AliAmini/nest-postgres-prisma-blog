@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Put, Delete } from '@nestjs/common';
 
-@Controller('posts')
-export class PostsController {
+@Controller('post')
+export class PostController {
   @Get() 
-  getAllPosts(): string {
-    return 'All Posts';
+  getAllPost(): string {
+    return 'All Post';
   }
 
   @Post()
