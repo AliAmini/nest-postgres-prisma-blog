@@ -21,6 +21,8 @@ model User {
   userType       UserType
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
+
+  posts           Post[]
 }
 
 model Post {
@@ -34,6 +36,9 @@ model Post {
 
   comments         Comment[]
   tags             Tag[]
+  
+  user_id          Int 
+  user             User @relation(fields: [user_id], references: [id])
 }
 
 model Comment {
