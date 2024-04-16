@@ -2,14 +2,15 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SignupDto } from '../dtos/auth.dto';
 import * as bcrypt from 'bcryptjs';
-import { UserType } from '@prisma/client';
+import * as jwt from 'jsonwebtoken';
+import { User, UserType } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async signup({email, password, name}: SignupDto) {
-    const emailAlreadyExists = this.checkEmailExists(email);
+    const emailAlreadyExists = await this.checkEmailExists(email);
     if(emailAlreadyExists) throw new ConflictException(`${email} already exists`);
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -23,9 +24,9 @@ export class AuthService {
       }
     });
 
-    console.log({hashedPassword, user});
+    const token = this.generateToken(user.id, user.name);
 
-    return user;
+    return {token};
   }
 
   async checkEmailExists(email: string): Promise<boolean> {
@@ -34,5 +35,18 @@ export class AuthService {
     });
 
     return Boolean(user);
+  }
+
+  generateToken(id: number, name: string): string {
+    return jwt.sign(
+      {
+        id: id,
+        name: name
+      }, 
+      process.env.JWT_SECRET, 
+      {
+        expiresIn: "7d"
+      }
+    );
   }
 }
