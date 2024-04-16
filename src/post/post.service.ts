@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PostResponseDto } from './dto/post.dto';
+import { DeletePostResponseDto, PostResponseDto } from './dto/post.dto';
 
 interface CreatePostParams {
   title: string;
@@ -79,10 +79,26 @@ export class PostService {
     });
     if(!post) throw new NotFoundException('Post not found');
 
+    // update post views
     await this.increasePostViewsCount(post.id);    
     
     return new PostResponseDto({...post, comments_count: post.comments.length, views_count: post.views_count+1});
   }
+
+  async deletePost(postId: number): Promise<DeletePostResponseDto> {
+    // delete comments 
+    const deleteCommentsResult = await this.prismaService.comment.deleteMany({where: {post_id: postId}});
+
+    // delete tags
+    const deleteTagsResult = await this.prismaService.tag.deleteMany({where: {post_id: postId}});
+
+    // delete post
+    const deletePostResult = await this.prismaService.post.delete({where: {id: postId}});
+
+    console.log({deleteCommentsResult, deleteTagsResult, deletePostResult});
+    
+    return new DeletePostResponseDto(true);
+  };
 
   private async increasePostViewsCount(postId: number): Promise<boolean> {
     const updateResult = await this.prismaService.post.update({

@@ -114,3 +114,11 @@ export class UpdatePostDto {
   @IsNotEmpty()
   article?: string;
 }
+
+export class DeletePostResponseDto {
+  deleted: boolean;
+
+  constructor(deleted: boolean) {
+    this.deleted = deleted;
+  }
+}
