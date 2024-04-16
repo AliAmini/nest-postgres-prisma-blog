@@ -19,3 +19,14 @@ export class SignupDto {
   @MinLength(6)
   password: string;
 }
+
+
+export class SigninDto {
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
