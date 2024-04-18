@@ -4,8 +4,8 @@ import { Queue } from 'bull';
 import { EMAIL } from './enum/email.enum';
 
 interface SendCommentEmailParams {
-  userName: string;
-  userEmail: string;
+  postCreatorName: string;
+  postCreatorEmail: string;
   postTitle: string;
 }
 
@@ -13,11 +13,11 @@ interface SendCommentEmailParams {
 export class EmailService {
   constructor(@InjectQueue(EMAIL) private readonly emailQueue: Queue) {}
 
-  async sendCommentEmail({postTitle, userEmail, userName}: SendCommentEmailParams) {
+  async sendCommentEmail({postTitle, postCreatorEmail, postCreatorName}: SendCommentEmailParams) {
     await this.emailQueue.add(EMAIL, {
       subject: `New comment for post ${postTitle}`,
-      to: userEmail,
-      text: `Hi ${userName}, you have a new comment for post ${postTitle}`
+      to: postCreatorEmail,
+      text: `Hi ${postCreatorName}, you have a new comment for post ${postTitle}`
     });
   }
 }

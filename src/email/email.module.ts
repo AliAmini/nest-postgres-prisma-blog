@@ -10,6 +10,7 @@ import { EmailProcessor } from './queue/email.processor';
       name: EMAIL,
     }),
   ],
-  providers: [EmailService, EmailProcessor]
+  providers: [EmailService, EmailProcessor],
+  exports: [EmailService]
 })
 export class EmailModule {}
