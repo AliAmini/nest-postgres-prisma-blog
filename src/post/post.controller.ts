@@ -13,8 +13,11 @@ export class PostController {
   }
 
   @Post()
-  createPost(@Body() body: CreatePostDto): Promise<PostResponseDto> {
-    return this.postService.createPost(body);
+  createPost(
+    @Body() body: CreatePostDto,
+    @User() user: UserInfo
+  ): Promise<PostResponseDto> {
+    return this.postService.createPost(user.id, body);
   };
 
   @Get(':id') 

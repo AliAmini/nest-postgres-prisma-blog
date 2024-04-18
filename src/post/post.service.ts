@@ -33,9 +33,7 @@ export class PostService {
     return posts.map(post => new PostResponseDto({...post, comments_count: post.comments.length}));
   }
 
-  async createPost({title, article, description, tags}: CreatePostParams): Promise<PostResponseDto> {
-    const userId = 1
-
+  async createPost(userId: number, {title, article, description, tags}: CreatePostParams): Promise<PostResponseDto> {
     const createdPost = await this.prismaService.post.create({
       data: {
         title, 
