@@ -1,15 +1,24 @@
-import { Controller } from '@nestjs/common';
-import { Post } from '@nestjs/common';
-import { Body, Param } from '@nestjs/common/decorators';
-import { ParseIntPipe } from '@nestjs/common/pipes';
+import { Controller, Body, Get, Param, Post, ParseIntPipe } from '@nestjs/common';
+import { UserType } from '@prisma/client';
+import { Roles } from 'src/decorators/roles.decorator';
 import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { CommentService } from './comment.service';
-import { CommentResponseDto, CreateCommentDto } from './dtos/comment.dto';
+import { CreateCommentDto } from './dto/comment.dto';
 
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  @Roles(UserType.MEMBER, UserType.ADMIN)
+  @Get('post/:postId')
+  getComments(
+    @Param('postId', ParseIntPipe) postId: number
+  ) {
+    return this.commentService.getComments(postId);
+  }
+
+
+  @Roles(UserType.MEMBER, UserType.ADMIN)
   @Post('post/:postId')
   createComment(
     @Body() {content}: CreateCommentDto,
@@ -18,4 +27,6 @@ export class CommentController {
   ) {
     return this.commentService.createComment(user.id, postId, content);
   }
+
+
 }
