@@ -5,6 +5,7 @@ import { PostController } from './post/post.controller';
 import { UserModule } from './user/user.module';
 import { PostService } from './post/post.service';
 import { PostModule } from './post/post.module';
+import { UserInterceptor } from './user/interceptor/user.interceptor';
 
 @Module({
   imports: [UserModule, PostModule],
@@ -14,6 +15,10 @@ import { PostModule } from './post/post.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: UserInterceptor
     }
   ],
 })

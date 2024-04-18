@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DeletePostResponseDto, PostResponseDto } from './dto/post.dto';
 
@@ -56,8 +57,6 @@ export class PostService {
 
 
   async updatePost(postId: number, data: UpdatePostParams): Promise<PostResponseDto> {
-    const userId = 1;
-
     // Update the post
     const updatedPost = await this.prismaService.post.update({
       where: { id: postId },
@@ -99,6 +98,17 @@ export class PostService {
     
     return new DeletePostResponseDto(true);
   };
+
+  async getUserByPost(postId: number): Promise<User>{
+    const post = await this.prismaService.post.findUnique({
+      where: {id: postId},
+      select: {
+        user: true
+      }
+    });
+
+    return post.user;
+  }
 
   private async increasePostViewsCount(postId: number): Promise<boolean> {
     const updateResult = await this.prismaService.post.update({

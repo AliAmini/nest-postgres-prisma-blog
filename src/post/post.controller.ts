@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, UnauthorizedException } from '@nestjs/common';
+import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { CreatePostDto, DeletePostResponseDto, PostResponseDto, UpdatePostDto } from './dto/post.dto';
 import { PostService } from './post.service';
 
@@ -22,15 +23,25 @@ export class PostController {
   }
 
   @Put(':id')
-  updatePost(
+  async updatePost(
     @Param('id', ParseIntPipe) postId: number,
-    @Body() body: UpdatePostDto
+    @Body() body: UpdatePostDto,
+    @User() user: UserInfo
   ): Promise<PostResponseDto> {
+    const postUser = await this.postService.getUserByPost(postId);
+    if(postUser.id !== user.id) throw new UnauthorizedException();
+
     return this.postService.updatePost(postId, body);
   };
 
   @Delete(':id')
-  deletePost(@Param('id', ParseIntPipe) postId: number): Promise<DeletePostResponseDto> {
+  async deletePost(
+    @Param('id', ParseIntPipe) postId: number,
+    @User() user: UserInfo
+  ): Promise<DeletePostResponseDto> {
+    const postUser = await this.postService.getUserByPost(postId);
+    if(postUser.id !== user.id) throw new UnauthorizedException();
+
     return this.postService.deletePost(postId);
   };
 }
