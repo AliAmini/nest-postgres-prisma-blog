@@ -1,17 +1,29 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AppService } from './app.service';
-import { PostController } from './post/post.controller';
 import { UserModule } from './user/user.module';
-import { PostService } from './post/post.service';
 import { PostModule } from './post/post.module';
 import { UserInterceptor } from './user/interceptor/user.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { CommentModule } from './comment/comment.module';
+import { EmailModule } from './email/email.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
-  imports: [UserModule, PostModule, PrismaModule, CommentModule],
+  imports: [
+    UserModule, 
+    PostModule, 
+    PrismaModule, 
+    CommentModule, 
+    EmailModule,
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6389,
+      },
+    }),
+  ],
   controllers: [],
   providers: [
     AppService,
