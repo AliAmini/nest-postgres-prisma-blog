@@ -8,9 +8,10 @@ import { PostModule } from './post/post.module';
 import { UserInterceptor } from './user/interceptor/user.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { PrismaModule } from './prisma/prisma.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
-  imports: [UserModule, PostModule, PrismaModule],
+  imports: [UserModule, PostModule, PrismaModule, CommentModule],
   controllers: [],
   providers: [
     AppService,
