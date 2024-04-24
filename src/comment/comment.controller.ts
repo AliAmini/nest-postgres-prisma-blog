@@ -5,7 +5,7 @@ import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/comment.dto';
 
-@Controller('comment')
+@Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 

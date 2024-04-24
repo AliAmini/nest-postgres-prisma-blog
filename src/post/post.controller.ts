@@ -5,7 +5,7 @@ import { User, UserInfo } from 'src/user/decorators/user.decorator';
 import { CreatePostDto, DeletePostResponseDto, PostResponseDto, UpdatePostDto } from './dto/post.dto';
 import { PostService } from './post.service';
 
-@Controller('post')
+@Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
